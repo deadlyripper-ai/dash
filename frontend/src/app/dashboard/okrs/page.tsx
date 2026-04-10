@@ -273,7 +273,7 @@ export default function OkrsPage() {
                   </td>
                 </tr>
               ) : (
-                filteredKrs.map((row, i) => (
+                filteredKrs.map((row) => (
               <tr
                 key={`${row.team}-${row.kr}`}
                 onClick={() => setSelectedKr(krList.indexOf(row))}
