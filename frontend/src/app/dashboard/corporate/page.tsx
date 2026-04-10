@@ -85,12 +85,12 @@ export default function CorporatePage() {
         <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
       </div>
 
-      <div style={{ background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', padding: '24px', marginBottom: '18px', boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15)' }}>
+      <div style={{ background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', padding: '20px', marginBottom: '18px', boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15)' }}>
         {/* Legend */}
         <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.07)', fontSize: '11px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#625ee9' }} />
-            <span style={{ color: '#9898B0' }}>Q4 2025 Actual</span>
+            <span style={{ color: '#9898B0' }}>Q4 2025</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: '#34C77B' }} />
@@ -98,69 +98,80 @@ export default function CorporatePage() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div style={{ width: '12px', height: '12px', borderRadius: '2px', background: 'rgba(138,135,196,0.3)' }} />
-            <span style={{ color: '#9898B0' }}>Q1 2026 Planned</span>
+            <span style={{ color: '#9898B0' }}>Planned</span>
           </div>
         </div>
 
-        {HEADCOUNT_DATA.map((item, i) => {
-          const scale = 20 // pixels per headcount
-          const q4Width = item.q4_actual * scale
-          const q1ActualWidth = item.q1_actual * scale
-          const q1PlannedWidth = item.planned * scale
+        <svg width="100%" height={HEADCOUNT_DATA.length * 35 + 20} viewBox={`0 0 500 ${HEADCOUNT_DATA.length * 35 + 20}`} style={{ marginBottom: '12px' }}>
+          {HEADCOUNT_DATA.map((item, i) => {
+            const y = i * 35 + 10
+            const maxValue = 35
+            const scale = 250 / maxValue
 
-          return (
-            <div key={i} style={{ marginBottom: i < HEADCOUNT_DATA.length - 1 ? '22px' : '0' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <span style={{ fontSize: '12px', fontWeight: 600, color: '#F0F0F6', minWidth: '120px' }}>{item.dept}</span>
-                <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                  <span style={{ fontSize: '10px', color: '#9898B0', fontFamily: 'DM Mono', minWidth: '100px', textAlign: 'right' }}>
-                    {item.q1_actual === item.planned ? '✓ On plan' : item.q1_actual < item.planned ? `${item.gap} hiring needed` : '+ Ahead'}
-                  </span>
-                </div>
-              </div>
+            return (
+              <g key={i}>
+                {/* Department label */}
+                <text x="5" y={y + 18} fontSize="11" fill="#F0F0F6" fontWeight="600">
+                  {item.dept}
+                </text>
 
-              <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-end' }}>
-                {/* Q4 2025 Actual */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                  <div style={{ width: '48px', height: q4Width + 'px', background: '#625ee9', borderRadius: '4px 4px 0 0', minHeight: '4px', transition: 'all 0.3s ease' }} />
-                  <span style={{ fontSize: '9px', color: '#9898B0', fontWeight: 600 }}>{item.q4_actual}</span>
-                </div>
+                {/* Q4 bar */}
+                <rect
+                  x="130"
+                  y={y + 5 + (maxValue - item.q4_actual) * 0.6}
+                  width={item.q4_actual * 2.5}
+                  height={item.q4_actual * 0.6}
+                  fill="#625ee9"
+                  rx="2"
+                />
+                <text x={130 + item.q4_actual * 2.5 + 4} y={y + 18} fontSize="9" fill="#9898B0">
+                  {item.q4_actual}
+                </text>
 
-                {/* Q1 2026 Actual */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                  <div style={{ width: '48px', height: q1ActualWidth + 'px', background: '#34C77B', borderRadius: '4px 4px 0 0', minHeight: '4px', transition: 'all 0.3s ease' }} />
-                  <span style={{ fontSize: '9px', color: '#9898B0', fontWeight: 600 }}>{item.q1_actual}</span>
-                </div>
+                {/* Q1 Actual bar */}
+                <rect
+                  x={150 + item.q4_actual * 2.5}
+                  y={y + 5 + (maxValue - item.q1_actual) * 0.6}
+                  width={item.q1_actual * 2.5}
+                  height={item.q1_actual * 0.6}
+                  fill="#34C77B"
+                  rx="2"
+                />
+                <text x={150 + item.q4_actual * 2.5 + item.q1_actual * 2.5 + 4} y={y + 18} fontSize="9" fill="#9898B0">
+                  {item.q1_actual}
+                </text>
 
-                {/* Q1 2026 Planned */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                  <div style={{ width: '48px', height: q1PlannedWidth + 'px', background: 'rgba(138,135,196,0.3)', borderRadius: '4px 4px 0 0', minHeight: '4px', border: '2px dashed rgba(138,135,196,0.5)', boxSizing: 'border-box' }} />
-                  <span style={{ fontSize: '9px', color: '#9898B0', fontWeight: 600 }}>{item.planned}</span>
-                </div>
+                {/* Planned bar (dashed outline) */}
+                <rect
+                  x={170 + (item.q4_actual + item.q1_actual) * 2.5}
+                  y={y + 5 + (maxValue - item.planned) * 0.6}
+                  width={item.planned * 2.5}
+                  height={item.planned * 0.6}
+                  fill="none"
+                  stroke="rgba(138,135,196,0.5)"
+                  strokeWidth="2"
+                  strokeDasharray="2,2"
+                  rx="2"
+                />
+                <text x={170 + (item.q4_actual + item.q1_actual + item.planned) * 2.5 + 4} y={y + 18} fontSize="9" fill="#9898B0">
+                  {item.planned}
+                </text>
 
-                {/* Velocity Arrow */}
-                <div style={{ marginLeft: '8px', paddingLeft: '8px', borderLeft: '1px solid rgba(255,255,255,0.07)' }}>
-                  {item.q1_actual > item.q4_actual ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#34C77B', fontWeight: 600, fontSize: '11px' }}>
-                      <span>↗</span>
-                      <span>+{item.q1_actual - item.q4_actual}</span>
-                    </div>
-                  ) : item.q1_actual === item.q4_actual ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#9898B0', fontWeight: 600, fontSize: '11px' }}>
-                      <span>→</span>
-                      <span>Flat</span>
-                    </div>
-                  ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#f28157', fontWeight: 600, fontSize: '11px' }}>
-                      <span>↘</span>
-                      <span>{item.q1_actual - item.q4_actual}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )
-        })}
+                {/* Change indicator */}
+                <text
+                  x="420"
+                  y={y + 18}
+                  fontSize="10"
+                  fill={item.q1_actual > item.q4_actual ? '#34C77B' : item.q1_actual === item.q4_actual ? '#9898B0' : '#f28157'}
+                  fontWeight="600"
+                  textAnchor="end"
+                >
+                  {item.q1_actual > item.q4_actual ? `+${item.q1_actual - item.q4_actual}` : item.q1_actual === item.q4_actual ? '—' : `${item.q1_actual - item.q4_actual}`}
+                </text>
+              </g>
+            )
+          })}
+        </svg>
       </div>
 
       {/* Department Health */}

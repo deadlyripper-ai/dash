@@ -93,21 +93,85 @@ export default function TechnologyPage() {
         <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
       </div>
 
-      <div style={{ background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', padding: '18px 20px', marginBottom: '18px', boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15)' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around', height: '150px', marginBottom: '12px', gap: '8px' }}>
-          {SPRINT_VELOCITY.map((velocity, i) => (
-            <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 }}>
-              <div style={{ fontSize: '10px', color: '#9898B0', marginBottom: '6px', fontWeight: 600 }}>{velocity}pts</div>
-              <div style={{ width: '100%', height: (velocity / 50) * 120 + 'px', background: i === 5 ? '#579BFC' : i === 4 ? '#625ee9' : '#5E5E78', borderRadius: '6px', position: 'relative' }}>
-                {i === 5 && <div style={{ position: 'absolute', top: '-3px', left: '50%', transform: 'translateX(-50%)', fontSize: '10px', color: '#579BFC', fontWeight: 600 }}>●</div>}
-              </div>
-              <div style={{ fontSize: '9px', color: '#5E5E78', marginTop: '6px' }}>S{i + 9}</div>
-            </div>
+      <div style={{ background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', padding: '20px', marginBottom: '18px', boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15)' }}>
+        <svg width="100%" height="280" viewBox="0 0 600 200" preserveAspectRatio="xMidYMid meet" style={{ overflow: 'visible' }}>
+          <defs>
+            <linearGradient id="velocityGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style={{ stopColor: '#579BFC', stopOpacity: 0.3 }} />
+              <stop offset="100%" style={{ stopColor: '#579BFC', stopOpacity: 0.05 }} />
+            </linearGradient>
+          </defs>
+
+          {/* Grid lines */}
+          <line x1="40" y1="150" x2="580" y2="150" stroke="rgba(255,255,255,0.07)" strokeWidth="1" strokeDasharray="2,2" />
+          <line x1="40" y1="100" x2="580" y2="100" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="2,2" />
+          <line x1="40" y1="50" x2="580" y2="50" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="2,2" />
+
+          {/* Target line */}
+          <line x1="40" y1="100" x2="580" y2="100" stroke="rgba(98,94,233,0.4)" strokeWidth="2" strokeDasharray="4,4" />
+
+          {/* Y-axis labels */}
+          <text x="20" y="155" fontSize="10" fill="#5E5E78" textAnchor="end">0</text>
+          <text x="20" y="105" fontSize="10" fill="#5E5E78" textAnchor="end">25</text>
+          <text x="20" y="55" fontSize="10" fill="#5E5E78" textAnchor="end">50</text>
+
+          {/* Smooth line graph */}
+          <path
+            d="M 40 133 Q 130 123 220 143 T 400 103 T 580 80"
+            fill="none"
+            stroke="#579BFC"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+
+          {/* Gradient fill under curve */}
+          <path
+            d="M 40 133 Q 130 123 220 143 T 400 103 T 580 80 L 580 180 L 40 180 Z"
+            fill="url(#velocityGradient)"
+          />
+
+          {/* Data points */}
+          {SPRINT_VELOCITY.map((velocity, i) => {
+            const x = 40 + (i / (SPRINT_VELOCITY.length - 1)) * 540
+            const y = 160 - (velocity / 50) * 110
+            return (
+              <circle
+                key={i}
+                cx={x}
+                cy={y}
+                r={i === SPRINT_VELOCITY.length - 1 ? '6' : '4'}
+                fill={i === SPRINT_VELOCITY.length - 1 ? '#579BFC' : '#579BFC'}
+                opacity={i === SPRINT_VELOCITY.length - 1 ? '1' : '0.6'}
+              />
+            )
+          })}
+
+          {/* X-axis labels */}
+          {SPRINT_VELOCITY.map((_, i) => (
+            <text
+              key={i}
+              x={40 + (i / (SPRINT_VELOCITY.length - 1)) * 540}
+              y="180"
+              fontSize="9"
+              fill="#5E5E78"
+              textAnchor="middle"
+            >
+              S{i + 9}
+            </text>
           ))}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '10px', color: '#9898B0' }}>
-          <span style={{ display: 'inline-block', width: '12px', height: '3px', background: '#5E5E78', borderRadius: '1px' }} />
-          Target: 50 pts/sprint
+        </svg>
+
+        {/* Legend */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', fontSize: '11px', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#9898B0' }}>
+            <span style={{ width: '12px', height: '2px', background: '#579BFC', borderRadius: '1px' }} />
+            Actual Velocity
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#9898B0' }}>
+            <span style={{ width: '12px', height: '2px', background: 'rgba(98,94,233,0.4)', borderRadius: '1px' }} />
+            Target: 50 pts/sprint
+          </div>
         </div>
       </div>
 
