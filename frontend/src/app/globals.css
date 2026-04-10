@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Core palette — Inception brand (dark-adapted) */
+  --bg: #0d0d0d;
+  --bg2: #141414;
+  --surface: #1a1a1a;
+  --surface2: #1f1f1f;
+  --surface3: #272727;
+
+  /* Inception brand purple (vivid periwinkle) — primary accent */
+  --ink: #625ee9;
+  --ink2: #b1affa;
+  --ink3: #4a4899;
+  --ink-glow: rgba(98, 94, 233, 0.12);
+  --ink-border: rgba(98, 94, 233, 0.2);
+
+  /* Text */
+  --t1: #f0f0f6;
+  --t2: #9898b0;
+  --t3: #5e5e78;
+
+  /* Borders */
+  --b1: rgba(255, 255, 255, 0.07);
+  --b2: rgba(255, 255, 255, 0.04);
+
+  /* Status colors */
+  --on: #34c77b;
+  --on-dim: rgba(52, 199, 123, 0.12);
+  --on-b: rgba(52, 199, 123, 0.25);
+  --risk: #f28157;
+  --risk-dim: rgba(242, 129, 87, 0.12);
+  --risk-b: rgba(242, 129, 87, 0.25);
+  --off: #e05555;
+  --off-dim: rgba(224, 85, 85, 0.12);
+  --off-b: rgba(224, 85, 85, 0.25);
+  --pend: #b1affa;
+  --pend-dim: rgba(177, 175, 250, 0.12);
+  --pend-b: rgba(177, 175, 250, 0.25);
+
+  /* Pillar colours (brand-aligned) */
+  --p-grow: #f9c1aa;
+  --p-tech: #625ee9;
+  --p-delv: #0693e3;
+  --p-corp: #9b51e0;
+
+  /* Fonts */
+  --font: 'Plus Jakarta Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+
+  /* Spacing */
+  --r: 10px;
+  --r2: 14px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--t1);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* Background radial gradient decoration */
+body::before {
+  content: '';
+  position: fixed;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(98, 94, 233, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink3);
+}
+
+/* Smooth transitions globally */
+button,
+a,
+input,
+textarea,
+select {
+  transition: all 0.18s ease;
+}
+
+/* Link styles */
+a {
+  color: var(--ink2);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+/* Input/form styling */
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--t1);
+  background: var(--surface);
+  border: 1px solid var(--b1);
+  border-radius: var(--r);
+  padding: 8px 12px;
+
+  &:focus {
+    outline: none;
+    border-color: var(--ink-border);
+    box-shadow: 0 0 0 3px var(--ink-glow);
+  }
+
+  &::placeholder {
+    color: var(--t3);
+  }
+}
+
+/* Code/mono styling */
+code,
+pre {
+  font-family: var(--mono);
+  background: var(--surface2);
+  color: var(--ink2);
+  border-radius: var(--r);
+  padding: 2px 6px;
+}
+
+/* Animation utilities */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fadeUp {
+  animation: fadeUp 0.3s ease both;
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.3s ease both;
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease both;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease both;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease both;
+}
+
+/* Utility classes */
+.text-gradient {
+  background: linear-gradient(135deg, var(--ink2), var(--ink3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  background: rgba(13, 13, 20, 0.85);
+  backdrop-filter: blur(14px);
+}
+
+.glow-ink {
+  box-shadow: 0 0 20px rgba(98, 94, 233, 0.15);
+}
+
+.glow-status-on {
+  box-shadow: 0 0 20px rgba(52, 199, 123, 0.15);
+}
+
+.glow-status-risk {
+  box-shadow: 0 0 20px rgba(232, 132, 74, 0.15);
+}
+
+/* === PRINT / PDF EXPORT === */
+.print-only { display: none; }
+.no-print { }
+
+@media print {
+  /* Hide all interactive UI */
+  .no-print { display: none !important; }
+
+  /* Show print report */
+  .print-only { display: block !important; }
+
+  /* Full-width print layout */
+  body { background: white !important; }
+
+  /* Page setup — A4 landscape for dashboard data density */
+  @page { size: A4 landscape; margin: 12mm 15mm; }
+
+  /* Prevent orphan breaks inside section cards */
+  .print-card { page-break-inside: avoid; }
+}
