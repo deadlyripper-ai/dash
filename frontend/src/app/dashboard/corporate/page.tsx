@@ -86,152 +86,90 @@ export default function CorporatePage() {
       </div>
 
       <div style={{ background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '18px', padding: '20px', marginBottom: '18px', boxShadow: '0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15)' }}>
-        <svg width="100%" height="340" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet" style={{ overflow: 'visible' }}>
-          <defs>
-            {/* Gradients for each department */}
-            <linearGradient id="appliedSciGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#625ee9', stopOpacity: 0.4 }} />
-              <stop offset="100%" style={{ stopColor: '#625ee9', stopOpacity: 0.05 }} />
-            </linearGradient>
-            <linearGradient id="engineeringGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#34C77B', stopOpacity: 0.4 }} />
-              <stop offset="100%" style={{ stopColor: '#34C77B', stopOpacity: 0.05 }} />
-            </linearGradient>
-            <linearGradient id="growthGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#f28157', stopOpacity: 0.4 }} />
-              <stop offset="100%" style={{ stopColor: '#f28157', stopOpacity: 0.05 }} />
-            </linearGradient>
-            <linearGradient id="financeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#ffc107', stopOpacity: 0.4 }} />
-              <stop offset="100%" style={{ stopColor: '#ffc107', stopOpacity: 0.05 }} />
-            </linearGradient>
-            <linearGradient id="hcGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#00bcd4', stopOpacity: 0.4 }} />
-              <stop offset="100%" style={{ stopColor: '#00bcd4', stopOpacity: 0.05 }} />
-            </linearGradient>
-            <linearGradient id="legalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#9c27b0', stopOpacity: 0.4 }} />
-              <stop offset="100%" style={{ stopColor: '#9c27b0', stopOpacity: 0.05 }} />
-            </linearGradient>
-            <linearGradient id="marketingGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#ff5722', stopOpacity: 0.4 }} />
-              <stop offset="100%" style={{ stopColor: '#ff5722', stopOpacity: 0.05 }} />
-            </linearGradient>
-            <linearGradient id="strategyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style={{ stopColor: '#4db8ff', stopOpacity: 0.4 }} />
-              <stop offset="100%" style={{ stopColor: '#4db8ff', stopOpacity: 0.05 }} />
-            </linearGradient>
-          </defs>
-
-          {/* Background grid */}
-          <line x1="40" y1="250" x2="560" y2="250" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-          <line x1="40" y1="200" x2="560" y2="200" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="2,2" />
-          <line x1="40" y1="150" x2="560" y2="150" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="2,2" />
-          <line x1="40" y1="100" x2="560" y2="100" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="2,2" />
-
-          {/* Y-axis labels */}
-          <text x="30" y="255" fontSize="9" fill="#5E5E78" textAnchor="end">0</text>
-          <text x="30" y="205" fontSize="9" fill="#5E5E78" textAnchor="end">50</text>
-          <text x="30" y="155" fontSize="9" fill="#5E5E78" textAnchor="end">100</text>
-
-          {/* Department bars with Q4 vs Q1 */}
+        <div style={{ marginBottom: '16px' }}>
           {HEADCOUNT_DATA.map((item, i) => {
             const colors = ['#625ee9', '#34C77B', '#f28157', '#ffc107', '#00bcd4', '#9c27b0', '#ff5722', '#4db8ff']
-            const x = 40 + (i / HEADCOUNT_DATA.length) * 520
-            const barWidth = (520 / HEADCOUNT_DATA.length) * 0.7
-            const q4Height = (item.q4_actual / 120) * 150
-            const q1Height = (item.q1_actual / 120) * 150
-            const plannedHeight = (item.planned / 120) * 150
+            const maxTotal = Math.max(...HEADCOUNT_DATA.map(d => d.planned))
+            const q4Percent = (item.q4_actual / maxTotal) * 100
+            const q1Percent = (item.q1_actual / maxTotal) * 100
+            const plannedPercent = (item.planned / maxTotal) * 100
+            const change = item.q1_actual - item.q4_actual
 
             return (
-              <g key={i}>
-                {/* Q4 bar (darker) */}
-                <rect
-                  x={x - barWidth / 2 - 8}
-                  y={250 - q4Height}
-                  width={barWidth / 2 - 2}
-                  height={q4Height}
-                  fill={colors[i]}
-                  opacity="0.5"
-                  rx="2"
-                />
+              <div key={i} style={{ marginBottom: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '11px', fontWeight: '600', color: '#F0F0F6', minWidth: '110px' }}>{item.dept}</span>
+                  <div style={{ display: 'flex', gap: '16px', alignItems: 'center', fontSize: '10px' }}>
+                    <span style={{ color: '#9898B0', minWidth: '35px', textAlign: 'right' }}>
+                      {item.q4_actual}
+                    </span>
+                    <span style={{ color: '#F0F0F6', fontWeight: '600', minWidth: '35px', textAlign: 'right' }}>
+                      {item.q1_actual}
+                    </span>
+                    <span style={{ color: change > 0 ? '#34C77B' : change < 0 ? '#f28157' : '#9898B0', fontWeight: '600', minWidth: '40px', textAlign: 'right' }}>
+                      {change > 0 ? `+${change}` : change === 0 ? '—' : change}
+                    </span>
+                  </div>
+                </div>
 
-                {/* Q1 bar (brighter) */}
-                <rect
-                  x={x - barWidth / 2 + 8}
-                  y={250 - q1Height}
-                  width={barWidth / 2 - 2}
-                  height={q1Height}
-                  fill={colors[i]}
-                  opacity="0.8"
-                  rx="2"
-                />
+                {/* Stacked progress bars */}
+                <div style={{ display: 'flex', height: '24px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  {/* Q4 segment */}
+                  <div
+                    style={{
+                      width: `${q4Percent}%`,
+                      background: colors[i],
+                      opacity: 0.4,
+                      transition: 'all 0.3s ease',
+                    }}
+                  />
 
-                {/* Planned indicator line */}
-                <line
-                  x1={x - barWidth / 2}
-                  y1={250 - plannedHeight}
-                  x2={x + barWidth / 2}
-                  y2={250 - plannedHeight}
-                  stroke={colors[i]}
-                  strokeWidth="2"
-                  strokeDasharray="3,2"
-                  opacity="0.6"
-                />
+                  {/* Q1 segment */}
+                  <div
+                    style={{
+                      width: `${q1Percent}%`,
+                      background: colors[i],
+                      opacity: 0.8,
+                      transition: 'all 0.3s ease',
+                    }}
+                  />
 
-                {/* Label */}
-                <text
-                  x={x}
-                  y="270"
-                  fontSize="8"
-                  fill="#9898B0"
-                  textAnchor="middle"
-                  fontWeight="600"
-                >
-                  {item.dept.split(' ')[0]}
-                </text>
+                  {/* Planned remaining */}
+                  <div
+                    style={{
+                      width: `${plannedPercent - q1Percent}%`,
+                      background: colors[i],
+                      opacity: 0.15,
+                      borderLeft: '2px dashed rgba(255,255,255,0.3)',
+                      transition: 'all 0.3s ease',
+                    }}
+                  />
+                </div>
 
-                {/* Values */}
-                <text
-                  x={x - barWidth / 4}
-                  y={250 - q4Height - 5}
-                  fontSize="8"
-                  fill="#9898B0"
-                  textAnchor="middle"
-                >
-                  {item.q4_actual}
-                </text>
-                <text
-                  x={x + barWidth / 4}
-                  y={250 - q1Height - 5}
-                  fontSize="8"
-                  fill="#F0F0F6"
-                  textAnchor="middle"
-                  fontWeight="600"
-                >
-                  {item.q1_actual}
-                </text>
-              </g>
+                {/* Sublabel */}
+                <div style={{ display: 'flex', gap: '16px', fontSize: '9px', color: '#5E5E78', marginTop: '4px' }}>
+                  <span>Q4: {item.q4_actual}</span>
+                  <span>Q1: {item.q1_actual}</span>
+                  <span>Target: {item.planned}</span>
+                </div>
+              </div>
             )
           })}
-
-          {/* X-axis */}
-          <line x1="40" y1="250" x2="560" y2="250" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-        </svg>
+        </div>
 
         {/* Legend */}
-        <div style={{ display: 'flex', gap: '16px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.07)', fontSize: '10px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '20px', paddingTop: '16px', borderTop: '1px solid rgba(255,255,255,0.07)', fontSize: '10px', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <div style={{ width: '12px', height: '12px', background: 'rgba(255,255,255,0.3)', borderRadius: '2px' }} />
+            <div style={{ width: '16px', height: '16px', background: 'rgba(255,255,255,0.3)', borderRadius: '3px' }} />
             <span style={{ color: '#9898B0' }}>Q4 2025</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <div style={{ width: '12px', height: '12px', background: 'rgba(255,255,255,0.6)', borderRadius: '2px' }} />
-            <span style={{ color: '#9898B0' }}>Q1 2026 Actual</span>
+            <div style={{ width: '16px', height: '16px', background: 'rgba(255,255,255,0.7)', borderRadius: '3px' }} />
+            <span style={{ color: '#9898B0' }}>Q1 Actual</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <div style={{ width: '12px', height: '2px', background: 'rgba(255,255,255,0.5)', borderRadius: '1px' }} />
-            <span style={{ color: '#9898B0' }}>Planned</span>
+            <div style={{ width: '16px', height: '16px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', border: '2px dashed rgba(255,255,255,0.3)' }} />
+            <span style={{ color: '#9898B0' }}>Q1 Target</span>
           </div>
         </div>
       </div>
